@@ -89,8 +89,8 @@
 	}
 
 	function updateLinkForTimeZone(timeZone) {
-		timeZoneLink.setAttribute('href', window.location.href + `timeZone=${timeZone}`);
-		timeZoneLink.innerHTML = window.location.href + `timeZone=${timeZone}`;
+		timeZoneLink.setAttribute('href', window.location.href.replace(/\/$/, "") + `?timeZone=${timeZone}`);
+		timeZoneLink.innerHTML = window.location.href.replace(/\/$/, "") + `?timeZone=${timeZone}`;
 	}
 
 	function pageSetup() {
