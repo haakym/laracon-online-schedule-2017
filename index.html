@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Laracon Online Schedule by Timezone</title>
+  <link rel="stylesheet" href="https://laracon.net/css/tachyons.min.css">
+  <link rel="stylesheet" href="https://laracon.net/css/style.css">
+</head>
+<body>
+	<div class="main mw8 pb5 center">
+
+		<div class="schedule module pv5 ph5 mt5">
+			<h2 class="light f3 bold mv0 tc">Schedule: March 8th, 2017</h2>
+			<div style="text-align:center; margin-top: 1em;">
+				<select id="zones"></select>
+				<p>
+					<a href="" id="timeZoneLink" style="color:white"></a>
+				</p>
+			</div>
+			<div class="line center"></div>
+
+			<div class="bg-white mw6-ns center-ns br2 ph3 ph5-ns pv4">
+				
+				<table id="schedule" style="width:100%">
+					<thead>
+						<tr>
+							<th>Time</th>
+							<th>Speaker</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+				
+			</div>
+
+		</div>
+
+	</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.11/moment-timezone-with-data.js"></script>
+<script>
+	const zones = moment.tz.names();
+	const speakerSchedule = [
+			{ 'datetime': moment.tz("2017-03-08 08:00", 'EST'), 'speaker': 'Mingle in Slack' },
+			{ 'datetime': moment.tz("2017-03-08 8:45", 'EST'), 'speaker': 'Opening remarks' },
+			{ 'datetime': moment.tz("2017-03-08 9:00", 'EST'), 'speaker': 'Jeffrey Way' },
+			{ 'datetime': moment.tz("2017-03-08 10:00", 'EST'), 'speaker': 'Evan You' },
+			{ 'datetime': moment.tz("2017-03-08 11:00", 'EST'), 'speaker': 'Break &amp; Mingle in Slack' },
+			{ 'datetime': moment.tz("2017-03-08 11:15", 'EST'), 'speaker': 'Rachel Andrew' },
+			{ 'datetime': moment.tz("2017-03-08 12:15", 'EST'), 'speaker': 'Adam Wathan' },
+			{ 'datetime': moment.tz("2017-03-08 13:15", 'EST'), 'speaker': 'Break &amp; Mingle in Slack' },
+			{ 'datetime': moment.tz("2017-03-08 13:30", 'EST'), 'speaker': 'Taylor Otwell' },
+			{ 'datetime': moment.tz("2017-03-08 14:30", 'EST'), 'speaker': 'Nick Canzoneri' },
+			{ 'datetime': moment.tz("2017-03-08 15:30", 'EST'), 'speaker': 'Break &amp; Mingle in Slack' },
+			{ 'datetime': moment.tz("2017-03-08 16:45", 'EST'), 'speaker': 'Jason McCreary' },
+			{ 'datetime': moment.tz("2017-03-08 16:45", 'EST'), 'speaker': 'Matt Stauffer' },
+			{ 'datetime': moment.tz("2017-03-08 17:45", 'EST'), 'speaker': 'Closing remarks' },
+			{ 'datetime': moment.tz("2017-03-08 18:00", 'EST'), 'speaker': 'Mingle in Slack' },
+		];
+
+	const zonesDropdown = document.querySelector('#zones');
+	const timeZoneLink = document.querySelector('#timeZoneLink');
+	const scheduleTableBody = document.querySelector('#schedule tbody');
+	const presetTimeZone = location.search.split('timeZone=')[1] ? location.search.split('timeZone=')[1] : 'EST';
+
+	zonesDropdown.innerHTML = zones.map((zone) => `<option value="${zone}">${zone}</option>`).join('');
+	zonesDropdown.addEventListener('change', event => {
+		const selectedTimeZone = event.target.options[event.target.selectedIndex].value;
+		updateScheduleForTimeZone(selectedTimeZone);
+		updateLinkForTimeZone(selectedTimeZone);
+	});
+	
+	function updateScheduleForTimeZone(timeZone) {
+		scheduleTableBody.innerHTML = speakerSchedule.map(
+			(talk) => {
+				const mingle = talk.speaker.includes('Mingle') ? 'class="mingle-time"' : '';
+
+				return `
+						<tr ${mingle}>
+							<td width="40%">${talk.datetime.tz(timeZone).format('h:mma')}</td>
+							<td>${talk.speaker}</td>
+						</tr>
+					`
+			}
+		).join('');
+	}
+
+	function updateLinkForTimeZone(timeZone) {
+		timeZoneLink.setAttribute('href', window.location.href + `timeZone=${timeZone}`);
+		timeZoneLink.innerHTML = window.location.href + `timeZone=${timeZone}`;
+	}
+
+	function pageSetup() {
+		updateScheduleForTimeZone(presetTimeZone);
+		updateLinkForTimeZone(presetTimeZone);
+		zonesDropdown.value = presetTimeZone;
+	}
+
+	pageSetup();
+
+
+</script>
+</body>
+</html>
+
