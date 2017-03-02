@@ -11,6 +11,7 @@
 	<div class="main mw8 pb5 center">
 
 		<div class="schedule module pv5 ph5 mt5">
+			<h2 class="light f3 bold mv0 tc">Laracon Online</h2>
 			<h2 class="light f3 bold mv0 tc">Schedule: March 8th, 2017</h2>
 			<div style="text-align:center; margin-top: 1em;">
 				<select id="zones"></select>
@@ -64,7 +65,7 @@
 	const zonesDropdown = document.querySelector('#zones');
 	const timeZoneLink = document.querySelector('#timeZoneLink');
 	const scheduleTableBody = document.querySelector('#schedule tbody');
-	const presetTimeZone = location.search.split('timeZone=')[1] ? location.search.split('timeZone=')[1] : 'EST';
+	const timeZone = setTimeZone();
 
 	zonesDropdown.innerHTML = zones.map((zone) => `<option value="${zone}">${zone}</option>`).join('');
 	zonesDropdown.addEventListener('change', event => {
@@ -89,14 +90,25 @@
 	}
 
 	function updateLinkForTimeZone(timeZone) {
-		timeZoneLink.setAttribute('href', window.location.href.replace(/\/$/, "") + `?timeZone=${timeZone}`);
-		timeZoneLink.innerHTML = window.location.href.replace(/\/$/, "") + `?timeZone=${timeZone}`;
+		const url = location.protocol+'//'+location.host+location.pathname + `#${timeZone}`; // .replace(/\/$/, "")
+		timeZoneLink.setAttribute('href', url);
+		timeZoneLink.innerHTML = url;
+	}
+
+	function setTimeZone() {
+		const presetTimeZone = window.location.hash ? window.location.hash.replace('#', '') : 'EST';
+
+		return timeZoneExists(presetTimeZone) ? presetTimeZone : 'EST';
+	}
+
+	function timeZoneExists(timeZone) {
+		return zones.includes(timeZone);
 	}
 
 	function pageSetup() {
-		updateScheduleForTimeZone(presetTimeZone);
-		updateLinkForTimeZone(presetTimeZone);
-		zonesDropdown.value = presetTimeZone;
+		updateScheduleForTimeZone(timeZone);
+		updateLinkForTimeZone(timeZone);
+		zonesDropdown.value = timeZone;
 	}
 
 	pageSetup();
