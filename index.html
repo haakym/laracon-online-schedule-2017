@@ -12,7 +12,6 @@
 
 		<div class="schedule module pv5 ph5 mt5">
 			<h2 class="light f3 bold mv0 tc">Laracon Online</h2>
-			<h2 class="light f3 bold mv0 tc">Schedule: March 8th, 2017</h2>
 			<div style="text-align:center; margin-top: 1em;">
 				<select id="zones"></select>
 				<p>
@@ -81,7 +80,7 @@
 
 				return `
 						<tr ${mingle}>
-							<td width="40%">${talk.datetime.tz(timeZone).format('h:mma')}</td>
+							<td width="40%">${talk.datetime.tz(timeZone).format('MMMM Do h:mma')}</td>
 							<td>${talk.speaker}</td>
 						</tr>
 					`
