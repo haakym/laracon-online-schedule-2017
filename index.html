@@ -42,6 +42,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.11/moment-timezone-with-data.js"></script>
 <script>
+(function() {
 	const zones = moment.tz.names();
 	const speakerSchedule = [
 			{ 'datetime': moment.tz("2017-03-08 08:00", 'EST'), 'speaker': 'Mingle in Slack' },
@@ -111,8 +112,7 @@
 	}
 
 	pageSetup();
-
-
+})()
 </script>
 </body>
 </html>
